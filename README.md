@@ -42,6 +42,8 @@ Escaneo por rango
 ```bash
 python arp_scanner.py -t 192.168.1.0/24
 ```
-![](https://ibb.co/ZpN1BY1s)
+
+![banner](https://i.ibb.co/ksM6496n/arp2.png)
+
 
 
