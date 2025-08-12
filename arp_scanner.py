@@ -9,6 +9,19 @@ from colorama import init, Fore
 from manuf import manuf
 
 init(autoreset=True)
+def print_logo():
+    logo = [
+        r"   __   ____ ____    ___  ___   __   _  _ _  _ ____ ____  ",
+        r"  /__\ (  _ (  _ \  / __)/ __) /__\ ( \( | \( | ___|  _ \ ",
+        r" /(__)\ )   /)___/  \__ ( (__ /(__)\ )  ( )  ( )__) )   / ",
+        r"(__)(__|_)\_|__)    (___/\___|__)(__|_)\_|_)\_|____|_)\_) ",
+    ]
+
+    colors = [Fore.MAGENTA, Fore.CYAN, Fore.YELLOW, Fore.GREEN, Fore.BLUE, Fore.RED, Fore.WHITE, Fore.MAGENTA]
+
+    for line, color in zip(logo, colors):
+        print(color + line)
+
 
 def check_root():
     if not hasattr(sys, "real_prefix") and sys.platform != "win32":
@@ -18,6 +31,7 @@ def check_root():
             sys.exit(1)
 
 def get_arguments():
+    print()
     parser = argparse.ArgumentParser(description="ARP Scanner - Escanea IPs y muestra la MAC")
     parser.add_argument("-t", "--target", required=True, dest="target", help="IP o rango de IP para escanear (ej: 192.168.1.1/24)" )
     args = parser.parse_args()
@@ -45,15 +59,19 @@ def scan(ip):
     return clients
 
 def main():
+    print_logo()
     check_root()
     target_ip = get_arguments()
     clients = scan(target_ip)
 
     if clients:
-        print(Fore.MAGENTA + "\n[*] Dispositivo encontrado\n")
-        print(Fore.WHITE + "\tIP\t\tMAC\t\t\tFAB")
+        if len(clients) == 1:
+            print(Fore.MAGENTA + "\n[*] Dispositivo encontrado\n")
+        else:
+            print(Fore.MAGENTA + "\n[*] Dispositivos encontrados\n")
+        print(Fore.WHITE + "\tIP\t\tMAC\t\t\tMANUF")
         for client in clients:
-            print(Fore.GREEN + client['IP'] + "\t" + Fore.YELLOW + client['MAC'] + "\t" + " " + Fore.CYAN + client['Fabricante'])
+            print("\t" + Fore.GREEN + client['IP'] + "\t" + Fore.YELLOW + client['MAC'] + "\t" +  Fore.CYAN + client['Fabricante'])
     else:
         print(Fore.RED + "\n[!] No se encontraron dispositivos activos.")
 
